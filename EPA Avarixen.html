@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluasi Pendaftaran Admin - Avarixen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        /* ------------------------------ HALAMAN 1: FORMULIR DATA DIRI ------------------------------ */
+        .halaman-1 {
+            display: block;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 🔘 TOMBOL RAHASIA PENYAMAR - HALAMAN 1 */
+        .tombol-rahasia {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            border: none;
+            cursor: pointer;
+            opacity: 0.04;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+        }
+
+        .tombol-rahasia:hover {
+            opacity: 0.12;
+        }
+
+        .header-top {
+            background: linear-gradient(90deg, #b3e5fc 0%, #40c4ff 50%, #03a9f4 100%);
+            padding: 25px 20px;
+            width: 100%;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .header-text h2 {
+            font-size: 17px;
+            font-weight: normal;
+        }
+
+        .form-section {
+            padding: 25px 20px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: inline-block;
+            font-weight: 500;
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 9px 11px;
+            border: 1px solid #999999;
+            border-radius: 2px;
+            font-size: 15px;
+        }
+
+        input.invalid {
+            border-color: #e53935;
+            box-shadow: 0 0 3px rgba(229, 57, 53, 0.5);
+        }
+
+        ::placeholder {
+            color: #888888;
+            opacity: 1;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #999999;
+            margin: 20px 0;
+        }
+
+        .peringatan {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .btn-next {
+            text-align: right;
+            margin-top: 25px;
+        }
+
+        button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 2px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .footer-area {
+            background: linear-gradient(90deg, #b3e5fc 0%, #40c4ff 50%, #03a9f4 100%);
+            height: 60px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* ------------------------------ HALAMAN 2: HITUNG MUNDUR & KODE ZIP ------------------------------ */
+        .halaman-2 {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #b3e5fc 0%, #40c4ff 40%, #03a9f4 70%, #b3e5fc 100%);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .tombol-kembali {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #757575;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000000;
+            text-align: center;
+        }
+
+        .wadah-kode {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .kode-zip {
+            font-size: 36px;
+            font-weight: bold;
+            color: #000000;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .tombol-salin {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .tombol-salin:active {
+            background-color: #45a049;
+        }
+
+        /* ------------------------------ HALAMAN 3: FORMULIR JAWABAN ------------------------------ */
+        .halaman-3 {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: none;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #999999;
+            border-radius: 2px;
+            font-size: 15px;
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        textarea.invalid, .radio-group.invalid {
+            border-color: #e53935;
+            box-shadow: 0 0 3px rgba(229, 57, 53, 0.5);
+        }
+
+        .info-karakter {
+            font-size: 13px;
+            color: #666666;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .radio-group {
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid #999999;
+            border-radius: 2px;
+        }
+
+        .radio-option {
+            display: block;
+            margin: 12px 0;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .bagian-lainnya {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cccccc;
+            display: none;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-kembali {
+            background-color: #757575;
+        }
+
+        .btn-sudahi {
+            background-color: #2e7d32;
+        }
+
+        /* Kotak Konfirmasi */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .kotak-konfirmasi {
+            background-color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 6px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .kotak-konfirmasi p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #333333;
+        }
+
+        .btn-konfirmasi {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .btn-ragu {
+            background-color: #f57c00;
+            flex: 1;
+        }
+
+        .btn-yakin {
+            background-color: #2e7d32;
+            flex: 1;
+        }
+
+        /* ------------------------------ HALAMAN SELESAI ------------------------------ */
+        .halaman-selesai {
+            background-color: #444444;
+            min-height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .teks-selesai {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 3px 3px 0 #000000;
+            line-height: 1.4;
+            margin-bottom: 30px;
+        }
+
+        /* Kotak Penyamar Asli */
+        .kotak-tersembunyi {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            background-color: #444444;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0.05;
+            transition: opacity 0.2s;
+        }
+
+        .kotak-tersembunyi:hover {
+            opacity: 0.15;
+        }
+
+        /* Panel Daftar Data */
+        .panel-daftar {
+            position: absolute;
+            top: 70px;
+            right: 15px;
+            width: 320px;
+            max-height: 450px;
+            overflow-y: auto;
+            background-color: #3a3a3a;
+            border: 1px solid #555555;
+            border-radius: 4px;
+            display: none;
+            z-index: 101;
+        }
+
+        .judul-panel {
+            padding: 12px;
+            background-color: #333333;
+            color: #ffffff;
+            font-weight: bold;
+            border-bottom: 1px solid #555555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-hapus-semua {
+            background-color: #c62828;
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .item-data {
+            padding: 12px;
+            color: #eeeeee;
+            border-bottom: 1px solid #444444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+
+        .info-data {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .info-data:hover {
+            color: #ffffff;
+        }
+
+        .btn-hapus {
+            background-color: #b71c1c;
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .kosong {
+            padding: 20px;
+            color: #888888;
+            text-align: center;
+        }
+
+        /* Tampilan Detail Data */
+        .overlay-detail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .kotak-detail {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            text-align: left;
+            line-height: 1.7;
+            font-size: 15px;
+            white-space: pre-line;
+        }
+
+        .tutup-detail {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #757575;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== HALAMAN 1: DATA DIRI ===================== -->
+    <div class="halaman-1" id="halaman1">
+        <!-- 🔘 TOMBOL RAHASIA -->
+        <button class="tombol-rahasia" onclick="lompatKeHalamanSelesai()"></button>
+
+        <div class="header-top">
+            <div class="header-text">
+                <h1>Evaluasi Pendaftaran Admin (EPA)</h1>
+                <h2>Peserta Pendaftaran Admin Tim Avarixen. 2026/2027</h2>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="peringatan" id="teksPeringatan1">Harap isi semua kolom yang diperlukan terlebih dahulu!</div>
+
+            <div class="form-group">
+                <label>Nama:</label>
+                <input type="text" id="nama" maxlength="37" placeholder="Harap Nama Lengkap!">
+            </div>
+
+            <div class="form-group">
+                <label>Umur:</label>
+                <input type="text" id="umur" inputmode="numeric" maxlength="2" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,2)" placeholder="Umurmu Saat Ini">
+            </div>
+
+            <div class="form-group">
+                <label>No. Peserta:</label>
+                <input type="password" id="nopeserta" maxlength="15" placeholder="Gunakan Kartumu!">
+            </div>
+
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="username" maxlength="10" placeholder="Gunakan Kartumu!">
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="text" id="password" maxlength="10" placeholder="Gunakan Kartumu!">
+            </div>
+
+            <div class="form-group">
+                <label>Kode Zip:</label>
+                <input type="text" id="kodezip" maxlength="5" placeholder="Ambil di halaman berikutnya!">
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="email" placeholder="Harap Isi Email yang Masih Aktif!">
+            </div>
+
+            <hr class="divider">
+
+            <p class="description">
+                <b>Evaluasi Pendaftaran Admin (EPA)</b> merupakan tahapan penilaian resmi yang ditujukan bagi para calon Admin di dalam Tim Avarixen. Dalam proses ini, setiap pendaftar diwajibkan melewati dua tahap evaluasi yang masing-masing berisi 5 pertanyaan, di mana seluruh pertanyaan yang diajukan bersifat terbuka dan tidak memiliki jawaban yang benar atau salah, sehingga kamu dapat menjawabnya dengan bebas sesuai pemikiran, pendapat, dan keadaan diri yang sebenarnya. Proses pemeriksaan dan penilaian terhadap jawaban yang kamu berikan akan memakan waktu bervariasi, yaitu berkisar dari paling singkat 1 jam hingga paling lama 2 hari lamanya, bergantung pada jumlah antrean pendaftar serta kebutuhan verifikasi dari pihak tim. Setelah proses penilaian selesai dilaksanakan, keputusan akhir mengenai hasil pendaftaranmu akan segera disampaikan secara resmi oleh sistem, tim admin, maupun pemilik tim melalui alamat email yang telah kamu cantumkan secara lengkap dan jelas pada kolom isian formulir di bagian atas; oleh sebab itu, pastikan alamat email yang kamu berikan benar dan masih aktif digunakan agar kamu dapat menerima kabar serta informasi selanjutnya dengan lancar.
+            </p>
+
+            <div class="btn-next">
+                <button onclick="cekDanLanjutHalaman1()">Lanjutkan</button>
+            </div>
+        </div>
+
+        <div class="footer-area"></div>
+    </div>
+
+    <!-- ===================== HALAMAN 2: HITUNG MUNDUR & KODE ZIP ===================== -->
+    <div class="halaman-2" id="halaman2">
+        <button class="tombol-kembali" onclick="kembaliKeHalaman1()">Kembali</button>
+
+        <div class="timer" id="tampilanWaktu">01:00</div>
+
+        <div class="wadah-kode" id="wadahKode">
+            <div class="kode-zip" id="tampilanKode"></div>
+            <button class="tombol-salin" id="tombolSalin">Salin</button>
+        </div>
+    </div>
+
+    <!-- ===================== HALAMAN 3: FORMULIR JAWABAN ===================== -->
+    <div class="halaman-3" id="halaman3">
+        <div class="header-top">
+            <div class="header-text">
+                <h1>Evaluasi Pendaftaran Admin (EPA)</h1>
+                <h2>Tahap 1: Pertanyaan Umum</h2>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="peringatan" id="teksPeringatan3">Harap isi semua pertanyaan terlebih dahulu!</div>
+
+            <div class="form-group">
+                <label>1. Apa yang membuat kamu tertarik untuk bergabung menjadi Admin di Tim Avarixen?</label>
+                <textarea id="jawaban1" maxlength="1000" placeholder="Ketik jawaban Anda..."></textarea>
+                <div class="info-karakter">Maksimal 1000 karakter | <span id="sisa1">1000</span> tersisa</div>
+            </div>
+
+            <div class="form-group">
+                <label>2. Bagaimana jika kamu diminta untuk menciptakan sebuah ide yang bagus untuk Avarixen?</label>
+                <textarea id="jawaban2" maxlength="1000" placeholder="Ketik jawaban Anda..."></textarea>
+                <div class="info-karakter">Maksimal 1000 karakter | <span id="sisa2">1000</span> tersisa</div>
+            </div>
+
+            <div class="form-group">
+                <label>3. Bagaimana cara kamu mengatur waktu antara kegiatan pribadi dan tugas jika diterima menjadi Admin?</label>
+                <textarea id="jawaban3" maxlength="1000" placeholder="Ketik jawaban Anda..."></textarea>
+                <div class="info-karakter">Maksimal 1000 karakter | <span id="sisa3">1000</span> tersisa</div>
+            </div>
+
+            <div class="form-group">
+                <label>4. Apa yang akan kamu lakukan jika terjadi perselisihan antar anggota dalam tim?</label>
+                <textarea id="jawaban4" maxlength="1000" placeholder="Ketik jawaban Anda..."></textarea>
+                <div class="info-karakter">Maksimal 1000 karakter | <span id="sisa4">1000</span> tersisa</div>
+            </div>
+
+            <div class="form-group">
+                <label>5. Posisi apa yang ingin Anda tempati?</label>
+                <div class="radio-group" id="grupPosisi">
+                    <label class="radio-option">
+                        <input type="radio" name="posisi" value="ketua" onchange="cekPilihanPosisi()"> Ketua
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="posisi" value="wakil" onchange="cekPilihanPosisi()"> Wakil Ketua
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="posisi" value="sekretaris" onchange="cekPilihanPosisi()"> Sekretaris
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="posisi" value="lainnya" onchange="cekPilihanPosisi()"> Lainnya
+                    </label>
+
+                    <div class="bagian-lainnya" id="bagianLainnya">
+                        <textarea id="posisiLain" maxlength="1000" placeholder="Sebutkan posisi yang diinginkan..."></textarea>
+                        <div class="info-karakter">Maksimal 1000 karakter | <span id="sisaLain">1000</span> tersisa</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="btn-group">
+                <button class="btn-kembali" onclick="kembaliKeHalaman1()">Kembali</button>
+                <button class="btn-sudahi" onclick="cekDanTampilkanKonfirmasi()">Sudahi</button>
+            </div>
+        </div>
+
+        <div class="footer-area"></div>
+    </div>
+
+    <!-- ===================== KOTAK KONFIRMASI ===================== -->
+    <div class="overlay" id="overlayKonfirmasi">
+        <div class="kotak-konfirmasi">
+            <p>Silahkan cermati jawaban anda baik-baik, jika anda merasa ragu. Anda dapat menggantinya dengan yang lain, semua tidak ada jawaban yang benar maupun salah</p>
+            <div class="btn-konfirmasi">
+                <button class="btn-ragu" onclick="tutupKonfirmasi()">Merasa Ragu</button>
+                <button class="btn-yakin" onclick="simpanDanTampilkanSelesai()">Yakin!</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- ===================== HALAMAN SELESAI ===================== -->
+    <div class="halaman-selesai" id="halamanSelesai">
+         <div class="kotak-tersembunyi" onclick="togglePanelDaftar()"></div>
+         <div class="panel-daftar" id="panelDaftar">
+             <div class="judul-panel">
+                 <span>Data Tersimpan</span>
+                 <button class="btn-hapus-semua" onclick="hapusSemuaData()">Hapus Semua</button>
+             </div>
+             <div id="isiDaftar" class="kosong">Belum ada data</div>
+         </div>
+         <div class="teks-selesai">
+             SELAMAT, ANDA TELAH<br>
+             MENYELESAIKAN EPA!<br>
+             <br>
+             MOHON TUNGGU<br>
+             JAWABAN KAMI DARI<br>
+             EMAIL ANDA!!!
+         </div>
+     </div>
+     <!-- ===================== TAMPILAN DETAIL DATA ===================== -->
+     <div class="overlay-detail" id="overlayDetail">
+         <div class="kotak-detail" id="kotakDetail"></div>
+         <button class="tutup-detail" onclick="tutupDetail()">Tutup</button>
+     </div>
+     <script>
+         // -------------------- HALAMAN 1 --------------------
+         function cekDanLanjutHalaman1() {
+             const nama = document.getElementById('nama').value.trim();
+             const umur = document.getElementById('umur').value.trim();
+             const nopeserta = document.getElementById('nopeserta').value.trim();
+             const username = document.getElementById('username').value.trim();
+             const password = document.getElementById('password').value.trim();
+             const kodezip = document.getElementById('kodezip').value.trim();
+             const email = document.getElementById('email').value.trim();
+             const peringatan = document.getElementById('teksPeringatan1');
+             document.querySelectorAll('.halaman-1 input').forEach(input => input.classList.remove('invalid'));
+             if (!nama || !umur || !nopeserta || !username || !password || !email) {
+                 peringatan.style.display = 'block';
+                 if (!nama) document.getElementById('nama').classList.add('invalid');
+                 if (!umur) document.getElementById('umur').classList.add('invalid');
+                 if (!nopeserta) document.getElementById('nopeserta').classList.add('invalid');
+                 if (!username) document.getElementById('username').classList.add('invalid');
+                 if (!password) document.getElementById('password').classList.add('invalid');
+                 if (!email) document.getElementById('email').classList.add('invalid');
+                 setTimeout(() => peringatan.style.display = 'none', 3000);
+                 return;
+             }
+             simpanDataSesi();
+             // Cek apakah kode zip sudah diisi
+             if (!kodezip) {
+                 document.getElementById('halaman1').style.display = 'none';
+                 document.getElementById('halaman2').style.display = 'flex';
+                 mulaiHitungMundur();
+             } else {
+                 // Langsung ke halaman formulir jika sudah diisi
+                 document.getElementById('halaman1').style.display = 'none';
+                 document.getElementById('halaman3').style.display = 'block';
+             }
+         }
+         function simpanDataSesi() {
+             sessionStorage.setItem('nama', document.getElementById('nama').value);
+             sessionStorage.setItem('umur', document.getElementById('umur').value);
+             sessionStorage.setItem('nopeserta', document.getElementById('nopeserta').value);
+             sessionStorage.setItem('username', document.getElementById('username').value);
+             sessionStorage.setItem('password', document.getElementById('password').value);
+             sessionStorage.setItem('kodezip', document.getElementById('kodezip').value);
+             sessionStorage.setItem('email', document.getElementById('email').value);
+         }
+         function kembaliKeHalaman1() {
+             document.getElementById('halaman2').style.display = 'none';
+             document.getElementById('halaman3').style.display = 'none';
+             document.getElementById('halamanSelesai').style.display = 'none';
+             document.getElementById('halaman1').style.display = 'block';
+         }
+         // 🔘 FUNGSI TOMBOL RAHASIA
+         function lompatKeHalamanSelesai() {
+             document.getElementById('halaman1').style.display = 'none';
+             document.getElementById('halamanSelesai').style.display = 'flex';
+             perbaruiDaftarFile();
+         }
+         // -------------------- HALAMAN 2 --------------------
+         let waktu = 60;
+         let kodeSaatIni = '';
+         function mulaiHitungMundur() {
+             waktu = 60;
+             const elemenWaktu = document.getElementById('tampilanWaktu');
+             const wadahKode = document.getElementById('wadahKode');
+             const elemenKode = document.getElementById('tampilanKode');
+             const tombolSalin = document.getElementById('tombolSalin');
+             elemenWaktu.style.display = 'block';
+             wadahKode.style.display = 'none';
+             const hitungMundur = setInterval(() => {
+                 const menit = Math.floor(waktu / 60);
+                 const detik = waktu % 60;
+                 const formatMenit = menit.toString().padStart(2, '0');
+                 const formatDetik = detik.toString().padStart(2, '0');
+                 
+                 elemenWaktu.textContent = `${formatMenit}:${formatDetik}`;
+                 waktu--;
+                 if (waktu < 0) {
+                     clearInterval(hitungMundur);
+                     elemenWaktu.style.display = 'none';
+                     
+                     kodeSaatIni = buatKodePola();
+                     elemenKode.textContent = kodeSaatIni;
+                     wadahKode.style.display = 'block';
+                     tombolSalin.onclick = function() {
+                         navigator.clipboard.writeText(kodeSaatIni)
+                             .then(() => {
+                                 tombolSalin.textContent = 'Tersalin!';
+                                 setTimeout(() => tombolSalin.textContent = 'Salin', 1500);
+                             })
+                             .catch(() => alert('Gagal menyalin kode'));
+                     };
+                 }
+             }, 1000);
+         }
+         function buatKodePola() {
+             const huruf = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+             const angka = '0123456789';
+             let kode = '';
+             const mulaiHuruf = Math.random() > 0.5;
+             if (mulaiHuruf) {
+                 kode += huruf[Math.floor(Math.random() * huruf.length)];
+                 kode += angka[Math.floor(Math.random() * angka.length)];
+                 kode += huruf[Math.floor(Math.random() * huruf.length)];
+                 kode += angka[Math.floor(Math.random() * angka.length)];
+                 kode += huruf[Math.floor(Math.random() * huruf.length)];
+             } else {
+                 kode += angka[Math.floor(Math.random() * angka.length)];
+                 kode += huruf[Math.floor(Math.random() * huruf.length)];
+                 kode += angka[Math.floor(Math.random() * angka.length)];
+                 kode += huruf[Math.floor(Math.random() * huruf.length)];
+                 kode += angka[Math.floor(Math.random() * angka.length)];
+             }
+             return kode;
+         }
+         // -------------------- HALAMAN 3 --------------------
+         function updateSisa(idInput, idInfo, max) {
+             const input = document.getElementById(idInput);
+             const info = document.getElementById(idInfo);
+             input.addEventListener('input', () => {
+                 const sisa = max - input.value.length;
+                 info.textContent = sisa;
+             });
+         }
+         function cekPilihanPosisi() {
+             const pilihan = document.querySelector('input[name="posisi"]:checked');
+             const bagian = document.getElementById('bagianLainnya');
+             bagian.style.display = (pilihan && pilihan.value === 'lainnya') ? 'block' : 'none';
+         }
+         function cekDanTampilkanKonfirmasi() {
+             const j1 = document.getElementById('jawaban1').value.trim();
+             const j2 = document.getElementById('jawaban2').value.trim();
+             const j3 = document.getElementById('jawaban3').value.trim();
+             const j4 = document.getElementById('jawaban4').value.trim();
+             const pilihanPosisi = document.querySelector('input[name="posisi"]:checked');
+             const posisiLain = document.getElementById('posisiLain').value.trim();
+             const peringatan = document.getElementById('teksPeringatan3');
+             document.querySelectorAll('textarea, .radio-group').forEach(el => el.classList.remove('invalid'));
+             let valid = true;
+             if (!j1) { document.getElementById('jawaban1').classList.add('invalid'); valid = false; }
+             if (!j2) { document.getElementById('jawaban2').classList.add('invalid'); valid = false; }
+             if (!j3) { document.getElementById('jawaban3').classList.add('invalid'); valid = false; }
+             if (!j4) { document.getElementById('jawaban4').classList.add('invalid'); valid = false; }
+             if (!pilihanPosisi) { document.getElementById('grupPosisi').classList.add('invalid'); valid = false; }
+             if (pilihanPosisi && pilihanPosisi.value === 'lainnya' && !posisiLain) {
+                 document.getElementById('posisiLain').classList.add('invalid'); valid = false;
+             }
+             if (!valid) {
+                 peringatan.style.display = 'block';
+                 setTimeout(() => peringatan.style.display = 'none', 3000);
+                 return;
+             }
+             document.getElementById('overlayKonfirmasi').style.display = 'flex';
+         }
+         function tutupKonfirmasi() {
+             document.getElementById('overlayKonfirmasi').style.display = 'none';
+         }
+         function getTeksPosisi() {
+             const pilihan = document.querySelector('input[name="posisi"]:checked')?.value;
+             if (pilihan === 'ketua') return 'Ketua';
+             if (pilihan === 'wakil') return 'Wakil Ketua';
+             if (pilihan === 'sekretaris') return 'Sekretaris';
+             if (pilihan === 'lainnya') return document.getElementById('posisiLain').value.trim() || 'Lainnya';
+             return '-';
+         }
+         // -------------------- SIMPAN DATA & HALAMAN SELESAI --------------------
+         function simpanDanTampilkanSelesai() {
+             const dataBaru = {
+                 id: Date.now(),
+                 nama: sessionStorage.getItem('nama') || '-',
+                 umur: sessionStorage.getItem('umur') || '-',
+                 noPeserta: sessionStorage.getItem('nopeserta') || '-',
+                 username: sessionStorage.getItem('username') || '-',
+                 password: sessionStorage.getItem('password') || '-',
+                 kodeZip: sessionStorage.getItem('kodezip') || '-',
+                 email: sessionStorage.getItem('email') || '-',
+                 jawaban1: document.getElementById('jawaban1').value.trim() || '-',
+                 jawaban2: document.getElementById('jawaban2').value.trim() || '-',
+                 jawaban3: document.getElementById('jawaban3').value.trim() || '-',
+                 jawaban4: document.getElementById('jawaban4').value.trim() || '-',
+                 posisi: getTeksPosisi(),
+                 tanggal: new Date().toLocaleString('id-ID')
+             };
+             let semuaData = JSON.parse(localStorage.getItem('dataEPA')) || [];
+             semuaData.push(dataBaru);
+             localStorage.setItem('dataEPA', JSON.stringify(semuaData));
+             sessionStorage.clear();
+             document.getElementById('overlayKonfirmasi').style.display = 'none';
+             document.getElementById('halaman3').style.display = 'none';
+             document.getElementById('halamanSelesai').style.display = 'flex';
+             perbaruiDaftarFile();
+         }
+         function togglePanelDaftar() {
+             const panel = document.getElementById('panelDaftar');
+             panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+         }
+         function perbaruiDaftarFile() {
+             const daftar = document.getElementById('isiDaftar');
+             const semuaData = JSON.parse(localStorage.getItem('dataEPA')) || [];
+             if (semuaData.length === 0) {
+                 daftar.innerHTML = '<div class="kosong">Belum ada data</div>';
+                 return;
+             }
+             daftar.innerHTML = '';
+             semuaData.forEach((data, index) => {
+                 const item = document.createElement('div');
+                 item.className = 'item-data';
+                 item.innerHTML = `
+                     <div class="info-data" onclick="tampilkanDetail(${data.id})">
+                         Data ${index + 1}: ${data.nama} | ${data.tanggal}
+                     </div>
+                     <button class="btn-hapus" onclick="hapusSatuData(${data.id})">Hapus</button>
+                 `;
+                 daftar.appendChild(item);
+             });
+         }
+         function tampilkanDetail(id) {
+             const semuaData = JSON.parse(localStorage.getItem('dataEPA')) || [];
+             const data = semuaData.find(d => d.id === id);
+             if (!data) return;
+             const teks = `Nama: ${data.nama}
+ Umur: ${data.umur}
+ No. Peserta: ${data.noPeserta}
+ Username: ${data.username}
+ Password: ${data.password}
+ Kode zip: ${data.kodeZip}
+ Email: ${data.email}
+ 1. ${data.jawaban1}
+ 2. ${data.jawaban2}
+ 3. ${data.jawaban3}
+ 4. ${data.jawaban4}
+ 5. ${data.posisi}
+ Tanggal disimpan: ${data.tanggal}`;
+             document.getElementById('kotakDetail').textContent = teks;
+             document.getElementById('overlayDetail').style.display = 'flex';
+         }
+         function tutupDetail() {
+             document.getElementById('overlayDetail').style.display = 'none';
+         }
+         function hapusSatuData(id) {
+             if (!confirm('Yakin ingin menghapus data ini?')) return;
+             let semuaData = JSON.parse(localStorage.getItem('dataEPA')) || [];
+             semuaData = semuaData.filter(d => d.id !== id);
+             localStorage.setItem('dataEPA', JSON.stringify(semuaData));
+             perbaruiDaftarFile();
+         }
+         function hapusSemuaData() {
+             if (!confirm('Yakin ingin menghapus SEMUA data tersimpan?')) return;
+             localStorage.removeItem('dataEPA');
+             perbaruiDaftarFile();
+         }
+         window.onload = function() {
+             updateSisa('jawaban1', 'sisa1', 1000);
+             updateSisa('jawaban2', 'sisa2', 1000);
+             updateSisa('jawaban3', 'sisa3', 1000);
+             updateSisa('jawaban4', 'sisa4', 1000);
+             updateSisa('posisiLain', 'sisaLain', 1000);
+             perbaruiDaftarFile();
+         };
+     </script>
+ </body>
+</html>
